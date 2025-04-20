@@ -108,7 +108,7 @@ const AddContractorPage = () => {
             endereco_cidade: formData.endereco_cidade || null,
             nascimento: formData.nascimento || null,
             created_by: user.id,
-            ativo: true,
+            ativo: false,
             status_contrato: 'Pendente'
           }
         ])
@@ -175,7 +175,7 @@ const AddContractorPage = () => {
       }
 
       toast.success('Prestador adicionado com sucesso! Um email de convite foi enviado.');
-      window.location.href = '/';
+      navigate(`/prestador/${prestador.id}`);
     } catch (err: any) {
       console.error('Error adding contractor:', err);
       setError(err.message || 'Erro ao adicionar prestador');

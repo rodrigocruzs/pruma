@@ -373,7 +373,7 @@ const ContractorDetailPage = () => {
                     )}
                     {contractor.ativo ? 'Ativo' : 'Inativo'}
                   </span>
-                  {!contractor.ativo && (
+                  {!contractor.ativo && userRole?.role === 'company' && (
                     <button
                       onClick={handleActivate}
                       disabled={isUpdating || isDownloading}
@@ -618,7 +618,7 @@ const ContractorDetailPage = () => {
                     Editar
                   </button>
                   
-                  {contractor.ativo && (
+                  {contractor.ativo && userRole?.role === 'company' && (
                     <button
                       onClick={handleInactivate}
                       disabled={isUpdating}
