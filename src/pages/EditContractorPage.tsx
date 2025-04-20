@@ -207,10 +207,10 @@ const EditContractorPage = () => {
       if (contractFile) {
         const fileExt = contractFile.name.split('.').pop();
         const fileName = `${id}-${Date.now()}.${fileExt}`;
-        const filePath = `contratos/${fileName}`;
+        const filePath = `${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('prestadores')
+          .from('contratos')
           .upload(filePath, contractFile);
 
         if (uploadError) {
@@ -231,7 +231,7 @@ const EditContractorPage = () => {
       }
 
       // Navigate back to the contractor details page
-      navigate(`/prestador/${id}`);
+      window.location.href = `/prestador/${id}`;
     } catch (err: any) {
       console.error('Error updating contractor:', err);
       setError(`Falha ao atualizar prestador: ${err.message}`);
@@ -248,7 +248,7 @@ const EditContractorPage = () => {
 
       // Delete the file from storage
       const { error: deleteError } = await supabase.storage
-        .from('prestadores')
+        .from('contratos')
         .remove([formData.contrato_path]);
 
       if (deleteError) {
