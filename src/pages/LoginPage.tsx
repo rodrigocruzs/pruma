@@ -48,7 +48,12 @@ const LoginPage = () => {
       }
 
       if (data?.user) {
-        navigate('/');
+        const redirect = location.state?.redirect;
+        if (redirect) {
+          navigate(redirect);
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (err: any) {
       console.error('Login error:', err);

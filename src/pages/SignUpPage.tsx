@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Loader2Icon, UserPlusIcon, AlertCircleIcon, ArrowLeftIcon, CheckCircle2Icon, XCircleIcon } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import { toast } from 'react-hot-toast';
 
 interface PasswordRequirement {
   text: string;
@@ -71,13 +72,8 @@ const SignUpPage = () => {
 
       if (signUpError) throw signUpError;
 
-      // Navigate to onboarding after successful signup
-      navigate('/onboarding', { 
-        state: { 
-          message: 'Por favor, verifique seu e-mail para confirmar sua conta.',
-          userId: data.user?.id
-        }
-      });
+      toast.success('Conta criada com sucesso!');
+      navigate('/dashboard');
     } catch (err: any) {
       console.error('Sign up error:', err);
       setError(err.message || 'Falha ao criar conta. Tente novamente.');

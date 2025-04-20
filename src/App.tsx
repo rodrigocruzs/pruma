@@ -9,8 +9,10 @@ import EditContractorPage from './pages/EditContractorPage';
 import BatchPaymentPage from './pages/BatchPaymentPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
+import PrestadorSignUpPage from './pages/PrestadorSignUpPage';
 import SettingsPage from './pages/SettingsPage';
 import OnboardingPage from './pages/OnboardingPage';
+import LandingPage from './pages/LandingPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SettingsProvider } from './contexts/SettingsContext';
@@ -24,8 +26,10 @@ const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/prestador/signup" element={<PrestadorSignUpPage />} />
 
         {/* Protected Routes */}
         <Route path="/onboarding" element={
@@ -38,7 +42,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         } />
 
-        <Route path="/" element={
+        <Route path="/dashboard" element={
           <ProtectedRoute allowedRoles={['company', 'prestador']}>
             <SupabaseProvider supabase={supabase} session={session}>
               <SettingsProvider>
@@ -55,6 +59,9 @@ const AppRoutes = () => {
           <Route path="adicionar-prestador" element={<AddContractorPage />} />
           <Route path="configuracoes" element={<SettingsPage />} />
         </Route>
+
+        {/* Redirect from old root to dashboard for existing users */}
+        <Route path="/app" element={<Navigate to="/dashboard" replace />} />
 
         {/* Catch all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
