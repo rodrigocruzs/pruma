@@ -85,12 +85,9 @@ const SignUpPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="text-center text-4xl font-bold text-blue-600 mb-6">
           Criar Nova Conta
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Crie sua conta para acessar o sistema
-        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -199,7 +196,7 @@ const SignUpPage = () => {
                 className="inline-flex items-center text-sm text-blue-600 hover:text-blue-500"
               >
                 <ArrowLeftIcon className="h-4 w-4 mr-1" />
-                Voltar para o login
+                Login
               </Link>
             </div>
           </form>
