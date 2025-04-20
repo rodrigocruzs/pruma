@@ -4,7 +4,7 @@ import { ArrowRight, CheckCircle, Users, FileText, CreditCard, Calendar } from '
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -47,12 +47,6 @@ const LandingPage = () => {
                   Comece Agora
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
-                <a 
-                  href="#saiba-mais"
-                  className="px-8 py-4 border border-gray-300 text-gray-700 text-lg font-medium rounded-md hover:bg-gray-50 transition duration-150 flex items-center justify-center"
-                >
-                  Saiba Mais
-                </a>
               </div>
             </div>
             <div className="md:w-1/2 mt-12 md:mt-0">
@@ -67,7 +61,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section id="saiba-mais" className="py-16 bg-white">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Tudo o que você precisa para gerenciar seus PJs</h2>
