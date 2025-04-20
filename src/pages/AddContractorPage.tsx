@@ -142,8 +142,40 @@ const AddContractorPage = () => {
 
       if (inviteError) throw inviteError;
 
+      // Handle contract file upload if a file was selected
+      if (formData.contractFile) {
+        const fileExt = formData.contractFile.name.split('.').pop();
+        const fileName = `${prestador.id}-${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('contratos')
+          .upload(filePath, formData.contractFile);
+
+        if (uploadError) {
+          console.error('Error uploading contract:', uploadError);
+          throw new Error(`Falha ao fazer upload do contrato: ${uploadError.message}`);
+        }
+
+        // Update the contract path in the database
+        const { error: pathUpdateError } = await supabase
+          .from('PrestadorPJ')
+          .update({ 
+            contrato_path: filePath,
+            status_contrato: 'Ativo'
+          })
+          .eq('id', prestador.id);
+
+        if (pathUpdateError) {
+          console.error('Error updating contract path:', pathUpdateError);
+          throw new Error(`Falha ao atualizar caminho do contrato: ${pathUpdateError.message}`);
+        }
+
+        console.log('Contract uploaded successfully:', filePath);
+      }
+
       toast.success('Prestador adicionado com sucesso! Um email de convite foi enviado.');
-      navigate('/');
+      window.location.href = '/';
     } catch (err: any) {
       console.error('Error adding contractor:', err);
       setError(err.message || 'Erro ao adicionar prestador');
