@@ -1,24 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Users, FileText, CreditCard, Calendar } from 'lucide-react';
 
 const LandingPage = () => {
-  // Force scroll to top when landing page loads and enable scrolling
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    document.body.style.overflow = 'auto';
-    document.body.style.height = 'auto';
-    
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.height = '';
-    };
-  }, []);
-
   return (
-    <div className="w-full overflow-y-auto">
+    <div className="absolute inset-0 overflow-auto" style={{ height: 'auto', minHeight: '100%' }}>
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="sticky top-0 z-10 bg-white shadow-sm">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <span className="text-2xl font-bold text-blue-600">Folha PJ</span>
@@ -40,7 +28,7 @@ const LandingPage = () => {
         </div>
       </header>
 
-      <div className="bg-gradient-to-b from-gray-50 to-gray-100">
+      <main className="bg-gradient-to-b from-gray-50 to-gray-100">
         {/* Hero Section */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-6">
@@ -63,11 +51,11 @@ const LandingPage = () => {
                 </div>
               </div>
               <div className="md:w-1/2 mt-12 md:mt-0">
-                <img 
-                  src="https://via.placeholder.com/600x400?text=Folha+PJ" 
-                  alt="Folha PJ Dashboard" 
-                  className="w-full h-auto rounded-lg shadow-xl"
-                />
+                <div 
+                  className="w-full h-64 md:h-80 bg-blue-100 rounded-lg shadow-xl flex items-center justify-center"
+                >
+                  <span className="text-blue-600 text-2xl font-bold">Folha PJ</span>
+                </div>
               </div>
             </div>
           </div>
@@ -146,62 +134,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">O que nossos clientes dizem</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Empresas de todos os tamanhos confiam na Folha PJ para gerenciar seus prestadores
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Testimonial 1 */}
-              <div className="bg-white p-8 rounded-lg shadow-sm">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-900">Ana Silva</h4>
-                    <p className="text-gray-600">CFO, TechBrasil</p>
-                  </div>
-                </div>
-                <p className="text-gray-700 italic">
-                  "A Folha PJ tornou o gerenciamento dos nossos 50+ prestadores muito mais eficiente. Economizamos pelo menos 15 horas por semana no departamento financeiro."
-                </p>
-              </div>
-
-              {/* Testimonial 2 */}
-              <div className="bg-white p-8 rounded-lg shadow-sm">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-900">Carlos Mendes</h4>
-                    <p className="text-gray-600">CEO, Startup Inovação</p>
-                  </div>
-                </div>
-                <p className="text-gray-700 italic">
-                  "Como uma startup em crescimento, precisávamos de um sistema que crescesse conosco. A Folha PJ nos ajudou a escalar de 5 para 30 PJs sem precisar contratar mais pessoas para o administrativo."
-                </p>
-              </div>
-
-              {/* Testimonial 3 */}
-              <div className="bg-white p-8 rounded-lg shadow-sm">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-900">Patrícia Santos</h4>
-                    <p className="text-gray-600">Gerente de RH, Construção Forte</p>
-                  </div>
-                </div>
-                <p className="text-gray-700 italic">
-                  "A gestão de contratos e o controle de pagamentos nunca foi tão organizada. A plataforma é intuitiva e o suporte ao cliente é excepcional."
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Call To Action */}
         <section className="py-16 bg-blue-600">
           <div className="container mx-auto px-6 text-center">
@@ -261,7 +193,7 @@ const LandingPage = () => {
             </div>
           </div>
         </footer>
-      </div>
+      </main>
     </div>
   );
 };
