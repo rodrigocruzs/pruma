@@ -1,19 +1,8 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Users, FileText, CreditCard, Calendar } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
 
 const LandingPage = () => {
-  const navigate = useNavigate();
-  const { session } = useAuth();
-
-  // Redirect authenticated users to dashboard
-  useEffect(() => {
-    if (session) {
-      navigate('/dashboard');
-    }
-  }, [session, navigate]);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Header */}

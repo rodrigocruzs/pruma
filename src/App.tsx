@@ -19,16 +19,41 @@ import { SettingsProvider } from './contexts/SettingsContext';
 import { SupabaseProvider } from './contexts/SupabaseContext';
 import { supabase } from './lib/supabaseClient';
 
+// Component to handle public routes - redirects to dashboard if user is already logged in
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { session } = useAuth();
+  
+  if (session) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
 const AppRoutes = () => {
   const { session } = useAuth();
 
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        {/* Public Routes with redirect for authenticated users */}
+        <Route path="/" element={
+          <PublicRoute>
+            <LandingPage />
+          </PublicRoute>
+        } />
+        <Route path="/login" element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        } />
+        <Route path="/signup" element={
+          <PublicRoute>
+            <SignUpPage />
+          </PublicRoute>
+        } />
+        
+        {/* Special public route that doesn't redirect */}
         <Route path="/prestador/signup" element={<PrestadorSignUpPage />} />
 
         {/* Protected Routes */}
