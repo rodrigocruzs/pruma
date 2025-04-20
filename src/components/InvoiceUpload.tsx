@@ -59,6 +59,8 @@ const InvoiceUpload: React.FC<InvoiceUploadProps> = ({
       if (updateError) throw updateError;
 
       onUploadComplete();
+      // Force page reload to update UI
+      window.location.reload();
     } catch (error: any) {
       console.error('Error uploading invoice:', error);
       onError('Falha ao fazer upload da nota fiscal. Por favor, tente novamente.');

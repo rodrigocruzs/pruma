@@ -95,6 +95,8 @@ const InvoiceView: React.FC<InvoiceViewProps> = ({ nfId, onError, onRemoveComple
       if (onRemoveComplete) {
         onRemoveComplete();
       }
+      // Force page reload to update UI
+      window.location.reload();
     } catch (error: any) {
       console.error('Error removing invoice:', error);
       onError('Falha ao remover nota fiscal. Por favor, tente novamente.');
