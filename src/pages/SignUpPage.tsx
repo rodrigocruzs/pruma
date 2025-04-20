@@ -18,6 +18,8 @@ const SignUpPage = () => {
     password: '',
     confirmPassword: '',
   });
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
 
   // Password requirements state
   const [passwordRequirements, setPasswordRequirements] = useState<PasswordRequirement[]>([
@@ -40,6 +42,15 @@ const SignUpPage = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    
+    // Track if password fields have been touched
+    if (name === 'password' && !passwordTouched) {
+      setPasswordTouched(true);
+    }
+    if (name === 'confirmPassword' && !confirmPasswordTouched) {
+      setConfirmPasswordTouched(true);
+    }
+    
     setFormData(prev => {
       const newData = { ...prev, [name]: value };
       if (name === 'password' || name === 'confirmPassword') {
@@ -82,10 +93,13 @@ const SignUpPage = () => {
     }
   };
 
+  // Determine if we should show validation status
+  const shouldShowValidation = passwordTouched || confirmPasswordTouched;
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="text-center text-4xl font-bold text-blue-600 mb-6">
+        <h2 className="text-center text-3xl font-bold text-gray-900 mb-6">
           Criar Nova Conta
         </h2>
       </div>
@@ -157,12 +171,19 @@ const SignUpPage = () => {
               <div className="space-y-1">
                 {passwordRequirements.map((req, index) => (
                   <div key={index} className="flex items-center text-sm">
-                    {req.met ? (
-                      <CheckCircle2Icon className="h-4 w-4 text-green-500 mr-2" />
+                    {shouldShowValidation ? (
+                      req.met ? (
+                        <CheckCircle2Icon className="h-4 w-4 text-green-500 mr-2" />
+                      ) : (
+                        <XCircleIcon className="h-4 w-4 text-red-500 mr-2" />
+                      )
                     ) : (
-                      <XCircleIcon className="h-4 w-4 text-red-500 mr-2" />
+                      <div className="h-4 w-4 rounded-full border border-gray-300 mr-2"></div>
                     )}
-                    <span className={req.met ? 'text-green-700' : 'text-red-700'}>
+                    <span className={shouldShowValidation 
+                      ? (req.met ? 'text-green-700' : 'text-red-700') 
+                      : 'text-gray-500'
+                    }>
                       {req.text}
                     </span>
                   </div>
