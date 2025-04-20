@@ -3,6 +3,8 @@ import { CreditCardIcon, CheckCircleIcon, AlertCircleIcon, XCircleIcon, FileText
 import { supabase } from '../lib/supabaseClient';
 import InvoiceUpload from '../components/InvoiceUpload';
 import InvoiceView from '../components/InvoiceView';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface Payment {
   id: string;
@@ -31,16 +33,48 @@ interface PaymentResponse {
 }
 
 const PaymentsPage = () => {
+  const { user } = useAuth();
+  const [userRole, setUserRole] = useState<{role: 'company' | 'prestador', prestador_id: string | null} | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedPayments, setSelectedPayments] = useState<string[]>([]);
   const [processingPayments, setProcessingPayments] = useState(false);
   const [invoiceError, setInvoiceError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPayments();
+    fetchUserRole();
   }, []);
+
+  const fetchUserRole = async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role, prestador_id')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching user role:', error);
+        setUserRole({ role: 'company', prestador_id: null });
+      } else if (data) {
+        setUserRole(data);
+      } else {
+        setUserRole({ role: 'company', prestador_id: null });
+      }
+    } catch (err) {
+      console.error('Error fetching user role:', err);
+      setUserRole({ role: 'company', prestador_id: null });
+    } finally {
+      fetchPayments();
+    }
+  };
 
   const fetchPayments = async () => {
     if (!supabase) {
@@ -50,7 +84,7 @@ const PaymentsPage = () => {
     }
 
     try {
-      const { data, error: fetchError } = await supabase
+      let query = supabase
         .from('Pagamento')
         .select(`
           id,
@@ -64,8 +98,15 @@ const PaymentsPage = () => {
             nome,
             sobrenome
           )
-        `)
-        .order('created_at', { ascending: false });
+        `);
+      
+      // Filter by prestador_id if user is a prestador
+      if (userRole?.role === 'prestador' && userRole?.prestador_id) {
+        query = query.eq('prestador_id', userRole.prestador_id);
+      }
+      
+      // Order by created_at
+      const { data, error: fetchError } = await query.order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
 
@@ -203,24 +244,35 @@ const PaymentsPage = () => {
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Pagamentos</h1>
-        {selectedPayments.length > 0 && (
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
-              {selectedPayments.length} pagamento
-              {selectedPayments.length !== 1 ? 's' : ''} selecionado
-              {selectedPayments.length !== 1 ? 's' : ''} (
-              {formatCurrency(selectedTotal)})
-            </span>
-            <button 
-              onClick={handleProcessSelected} 
-              disabled={processingPayments} 
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        <div className="flex items-center gap-4">
+          {userRole?.role === 'company' && (
+            <button
+              onClick={() => navigate('/pagamentos/lote')}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               <CreditCardIcon className="h-5 w-5 mr-2" />
-              {processingPayments ? 'Processando...' : 'Processar Selecionados'}
+              Criar Folha PJ
             </button>
-          </div>
-        )}
+          )}
+          {selectedPayments.length > 0 && (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">
+                {selectedPayments.length} pagamento
+                {selectedPayments.length !== 1 ? 's' : ''} selecionado
+                {selectedPayments.length !== 1 ? 's' : ''} (
+                {formatCurrency(selectedTotal)})
+              </span>
+              <button 
+                onClick={handleProcessSelected} 
+                disabled={processingPayments} 
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <CreditCardIcon className="h-5 w-5 mr-2" />
+                {processingPayments ? 'Processando...' : 'Processar Selecionados'}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

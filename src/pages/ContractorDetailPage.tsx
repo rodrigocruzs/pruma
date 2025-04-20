@@ -4,6 +4,7 @@ import { ArrowLeftIcon, FileTextIcon, DownloadIcon, XCircleIcon, FileIcon, Alert
 import { supabase } from '../lib/supabaseClient';
 import InvoiceUpload from '../components/InvoiceUpload';
 import InvoiceView from '../components/InvoiceView';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Payment {
   id: string;
@@ -41,7 +42,8 @@ interface PrestadorPJDetail {
 const ContractorDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
+  const { user } = useAuth();
+  const [userRole, setUserRole] = useState<{role: 'company' | 'prestador', prestador_id: string | null} | null>(null);
   const [contractor, setContractor] = useState<PrestadorPJDetail | null>(null);
   const [paymentHistory, setPaymentHistory] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,8 +53,51 @@ const ContractorDetailPage = () => {
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [invoiceError, setInvoiceError] = useState<string | null>(null);
 
+  useEffect(() => {
+    fetchUserRole();
+  }, [user]);
+  
+  const fetchUserRole = async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role, prestador_id')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching user role:', error);
+        setUserRole({ role: 'company', prestador_id: null });
+      } else if (data) {
+        setUserRole(data);
+      } else {
+        setUserRole({ role: 'company', prestador_id: null });
+      }
+    } catch (err) {
+      console.error('Error fetching user role:', err);
+      setUserRole({ role: 'company', prestador_id: null });
+    } finally {
+      // Continue with loading contract details
+      loadContractorDetails();
+    }
+  };
+
+  const loadContractorDetails = () => {
+    if (id) {
+      fetchPaymentHistory();
+    }
+  };
+
   const fetchPaymentHistory = useCallback(async () => {
     if (!id) return;
+    
+    // Only fetch payment history for company users
+    if (userRole?.role === 'prestador') return;
     
     try {
       const { data, error } = await supabase
@@ -68,11 +113,13 @@ const ContractorDetailPage = () => {
       console.error('Error fetching payment history:', error);
       setError(error.message);
     }
-  }, [id]);
+  }, [id, userRole]);
 
   useEffect(() => {
-    fetchPaymentHistory();
-  }, [fetchPaymentHistory]);
+    if (userRole) {
+      fetchPaymentHistory();
+    }
+  }, [fetchPaymentHistory, userRole]);
 
   useEffect(() => {
     const fetchContractorDetails = async () => {
@@ -273,300 +320,327 @@ const ContractorDetailPage = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <button
-            onClick={() => navigate('/')}
-            className="mb-4 flex items-center text-gray-600 hover:text-gray-800"
-          >
-            <ArrowLeftIcon className="h-4 w-4 mr-1" />
-            Voltar
-          </button>
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">
-                {contractor.nome}
-              </h1>
-              <p className="text-gray-600">{contractor.funcao ?? 'Função não informada'}</p>
-            </div>
-            <div className="flex items-center gap-4">
-              {!contractor.contrato_path && (
-                <div className="flex items-center text-amber-600">
-                  <AlertCircleIcon className="h-5 w-5 mr-2" />
-                  <span className="text-sm">Contrato pendente</span>
-                </div>
-              )}
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${contractor.ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {contractor.ativo ? (
-                  <CheckCircleIcon className="h-4 w-4 mr-1.5" />
-                ) : (
-                  <XCircleIcon className="h-4 w-4 mr-1.5" />
-                )}
-                {contractor.ativo ? 'Ativo' : 'Inativo'}
-              </span>
-              {!contractor.ativo && (
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+          {error}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="text-center py-12">
+          <Loader2Icon className="h-12 w-12 animate-spin mx-auto text-blue-600" />
+          <p className="mt-4 text-gray-600">Carregando informações do prestador...</p>
+        </div>
+      ) : contractor ? (
+        <div>
+          <div className="mb-6 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              {/* Only show back button for company users */}
+              {userRole?.role === 'company' && (
                 <button
-                  onClick={handleActivate}
-                  disabled={isUpdating || isDownloading}
-                  className="flex items-center px-3 py-1 text-sm bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 transition duration-150 ease-in-out"
-                  title="Ativar Prestador"
+                  onClick={() => navigate(-1)}
+                  className="p-2 rounded-full hover:bg-gray-100"
+                  aria-label="Voltar"
                 >
-                  {isUpdating ? (
-                    <RefreshCwIcon className="animate-spin h-4 w-4 mr-1.5" />
-                  ) : (
-                    <CheckCircleIcon className="h-4 w-4 mr-1.5" />
-                  )}
-                  {isUpdating ? 'Ativando...' : 'Ativar'}
+                  <ArrowLeftIcon className="h-5 w-5 text-gray-600" />
                 </button>
               )}
+              <h1 className="text-2xl font-bold">{contractor.nome} {contractor.sobrenome}</h1>
             </div>
           </div>
-        </div>
-        <div className="p-6">
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold mb-4">Contrato</h2>
-            <div className="bg-gray-50 border rounded-lg p-4">
-              {contractor.contrato_path ? (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FileIcon className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0" />
+
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    {contractor.nome}
+                  </h2>
+                  <p className="text-gray-600">{contractor.funcao ?? 'Função não informada'}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  {!contractor.contrato_path && (
+                    <div className="flex items-center text-amber-600">
+                      <AlertCircleIcon className="h-5 w-5 mr-2" />
+                      <span className="text-sm">Contrato pendente</span>
+                    </div>
+                  )}
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${contractor.ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {contractor.ativo ? (
+                      <CheckCircleIcon className="h-4 w-4 mr-1.5" />
+                    ) : (
+                      <XCircleIcon className="h-4 w-4 mr-1.5" />
+                    )}
+                    {contractor.ativo ? 'Ativo' : 'Inativo'}
+                  </span>
+                  {!contractor.ativo && (
+                    <button
+                      onClick={handleActivate}
+                      disabled={isUpdating || isDownloading}
+                      className="flex items-center px-3 py-1 text-sm bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 transition duration-150 ease-in-out"
+                      title="Ativar Prestador"
+                    >
+                      {isUpdating ? (
+                        <RefreshCwIcon className="animate-spin h-4 w-4 mr-1.5" />
+                      ) : (
+                        <CheckCircleIcon className="h-4 w-4 mr-1.5" />
+                      )}
+                      {isUpdating ? 'Ativando...' : 'Ativar'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="mb-8">
+                <h2 className="text-lg font-semibold mb-4">Contrato</h2>
+                <div className="bg-gray-50 border rounded-lg p-4">
+                  {contractor.contrato_path ? (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <FileIcon className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium text-gray-800 truncate max-w-xs" title={contractor.contrato_path.split('/').pop()}>
+                            {contractor.contrato_path.split('/').pop() || 'Contrato Anexado'}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleDownloadContract}
+                        disabled={isDownloading}
+                        className="flex items-center px-4 py-2 text-sm bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition duration-150 ease-in-out"
+                      >
+                        {isDownloading ? (
+                          <Loader2Icon className="animate-spin h-4 w-4 mr-2" />
+                        ) : (
+                          <DownloadIcon className="h-4 w-4 mr-2" />
+                        )}
+                        {isDownloading ? 'Baixando...' : 'Download'}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center text-gray-500">
+                      <AlertCircleIcon className="h-5 w-5 mr-2" />
+                      <p>Nenhum contrato anexado.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h2 className="text-lg font-semibold mb-4">
+                    Informações Pessoais
+                  </h2>
+                  <div className="space-y-3">
                     <div>
-                      <p className="font-medium text-gray-800 truncate max-w-xs" title={contractor.contrato_path.split('/').pop()}>
-                        {contractor.contrato_path.split('/').pop() || 'Contrato Anexado'}
+                      <p className="text-sm font-medium text-gray-500 flex items-center">
+                        <UserIcon className="h-4 w-4 mr-1.5 text-gray-400" />
+                        Nome
                       </p>
+                      <p className="text-gray-800 pl-6">{contractor.nome} {contractor.sobrenome}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500 flex items-center">
+                        <BuildingIcon className="h-4 w-4 mr-1.5 text-gray-400" />
+                        Razão Social
+                      </p>
+                      <p className="text-gray-800 pl-6">{contractor.razao_social ?? 'Não informada'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">CNPJ</p>
+                      <p className="text-gray-800 pl-6">{contractor.cnpj ?? 'Não informado'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Data de Nascimento</p>
+                      <p className="text-gray-800 pl-6">{formatDate(contractor.nascimento)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">E-mail</p>
+                      <p className="text-gray-800 pl-6">{contractor.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500 flex items-center">
+                        <PhoneIcon className="h-4 w-4 mr-1.5 text-gray-400" />
+                        Telefone de Contato
+                      </p>
+                      <p className="text-gray-800 pl-6">{contractor.telefone_contato ?? 'Não informado'}</p>
                     </div>
                   </div>
-                  <button
-                    onClick={handleDownloadContract}
-                    disabled={isDownloading}
-                    className="flex items-center px-4 py-2 text-sm bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition duration-150 ease-in-out"
-                  >
-                    {isDownloading ? (
-                      <Loader2Icon className="animate-spin h-4 w-4 mr-2" />
-                    ) : (
-                      <DownloadIcon className="h-4 w-4 mr-2" />
-                    )}
-                    {isDownloading ? 'Baixando...' : 'Download'}
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center text-gray-500">
-                  <AlertCircleIcon className="h-5 w-5 mr-2" />
-                  <p>Nenhum contrato anexado.</p>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h2 className="text-lg font-semibold mb-4">
-                Informações Pessoais
-              </h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 flex items-center">
-                    <UserIcon className="h-4 w-4 mr-1.5 text-gray-400" />
-                    Nome
-                  </p>
-                  <p className="text-gray-800 pl-6">{contractor.nome} {contractor.sobrenome}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500 flex items-center">
-                    <BuildingIcon className="h-4 w-4 mr-1.5 text-gray-400" />
-                    Razão Social
-                  </p>
-                  <p className="text-gray-800 pl-6">{contractor.razao_social ?? 'Não informada'}</p>
+                  <h2 className="text-lg font-semibold mb-4">
+                    Informações Profissionais
+                  </h2>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Função</p>
+                      <p className="text-gray-800">{contractor.funcao ?? 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Data de Início</p>
+                      <p className="text-gray-800">{formatDate(contractor.data_inicio)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Remuneração</p>
+                      <p className="text-gray-800 font-semibold">{formatCurrency(contractor.remuneracao)}</p>
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">CNPJ</p>
-                  <p className="text-gray-800 pl-6">{contractor.cnpj ?? 'Não informado'}</p>
+                  <h2 className="text-lg font-semibold mb-4">Endereço</h2>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Logradouro</p>
+                      <p className="text-gray-800">{contractor.endereco_logradouro ?? 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Cidade</p>
+                      <p className="text-gray-800">{contractor.endereco_cidade ?? 'N/A'}</p>
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Data de Nascimento</p>
-                  <p className="text-gray-800 pl-6">{formatDate(contractor.nascimento)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">E-mail</p>
-                  <p className="text-gray-800 pl-6">{contractor.email}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 flex items-center">
-                    <PhoneIcon className="h-4 w-4 mr-1.5 text-gray-400" />
-                    Telefone de Contato
-                  </p>
-                  <p className="text-gray-800 pl-6">{contractor.telefone_contato ?? 'Não informado'}</p>
+                  <h2 className="text-lg font-semibold mb-4">
+                    Informações de Pagamento
+                  </h2>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Chave PIX</p>
+                      <p className="text-gray-800">{contractor.chave_pix ?? 'Não informada'}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold mb-4">
-                Informações Profissionais
-              </h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Função</p>
-                  <p className="text-gray-800">{contractor.funcao ?? 'N/A'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Data de Início</p>
-                  <p className="text-gray-800">{formatDate(contractor.data_inicio)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Remuneração</p>
-                  <p className="text-gray-800 font-semibold">{formatCurrency(contractor.remuneracao)}</p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold mb-4">Endereço</h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Logradouro</p>
-                  <p className="text-gray-800">{contractor.endereco_logradouro ?? 'N/A'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Cidade</p>
-                  <p className="text-gray-800">{contractor.endereco_cidade ?? 'N/A'}</p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold mb-4">
-                Informações de Pagamento
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Chave PIX</p>
-                  <p className="text-gray-800">{contractor.chave_pix ?? 'Não informada'}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-4">
-              Histórico de Pagamentos
-            </h2>
-            {invoiceError && (
-              <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                {invoiceError}
-              </div>
-            )}
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-              {loading ? (
-                <div className="p-4 text-center text-gray-500">
-                  <Loader2Icon className="animate-spin h-5 w-5 mx-auto mb-2" />
-                  Carregando histórico...
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Data
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Valor
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Nota Fiscal
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Mês Referente
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {paymentHistory.length > 0 ? (
-                        paymentHistory.map((payment) => (
-                          <tr key={payment.id} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {formatDate(payment.data)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {formatCurrency(payment.valor)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${payment.status.toLowerCase() === 'pago' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                {payment.status.toLowerCase() === 'pago' ? (
-                                  <>
-                                    <CheckCircleIcon className="mr-1 h-4 w-4" />
-                                    Pago
-                                  </>
-                                ) : (
-                                  <>
-                                    <AlertCircleIcon className="mr-1 h-4 w-4" />
-                                    Pendente
-                                  </>
-                                )}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              {payment.nf_id ? (
-                                <InvoiceView
-                                  nfId={payment.nf_id}
-                                  onError={handleInvoiceError}
-                                  onRemoveComplete={handleInvoiceUploadComplete}
-                                />
-                              ) : (
-                                <InvoiceUpload
-                                  paymentId={payment.id}
-                                  onUploadComplete={handleInvoiceUploadComplete}
-                                  onError={handleInvoiceError}
-                                />
-                              )}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {formatMonth(payment.mes_referente)}
-                            </td>
+              <div className="mt-8">
+                <h2 className="text-lg font-semibold mb-4">
+                  Histórico de Pagamentos
+                </h2>
+                {invoiceError && (
+                  <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    {invoiceError}
+                  </div>
+                )}
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                  {loading ? (
+                    <div className="p-4 text-center text-gray-500">
+                      <Loader2Icon className="animate-spin h-5 w-5 mx-auto mb-2" />
+                      Carregando histórico...
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Data
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Valor
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Status
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Nota Fiscal
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Mês Referente
+                            </th>
                           </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={5} className="px-6 py-8 text-sm text-center bg-gray-50">
-                            Não há registros de pagamentos para este prestador.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {paymentHistory.length > 0 ? (
+                            paymentHistory.map((payment) => (
+                              <tr key={payment.id} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                  {formatDate(payment.data)}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                  {formatCurrency(payment.valor)}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${payment.status.toLowerCase() === 'pago' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                    {payment.status.toLowerCase() === 'pago' ? (
+                                      <>
+                                        <CheckCircleIcon className="mr-1 h-4 w-4" />
+                                        Pago
+                                      </>
+                                    ) : (
+                                      <>
+                                        <AlertCircleIcon className="mr-1 h-4 w-4" />
+                                        Pendente
+                                      </>
+                                    )}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {payment.nf_id ? (
+                                    <InvoiceView
+                                      nfId={payment.nf_id}
+                                      onError={handleInvoiceError}
+                                      onRemoveComplete={handleInvoiceUploadComplete}
+                                    />
+                                  ) : (
+                                    <InvoiceUpload
+                                      paymentId={payment.id}
+                                      onUploadComplete={handleInvoiceUploadComplete}
+                                      onError={handleInvoiceError}
+                                    />
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                  {formatMonth(payment.mes_referente)}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={5} className="px-6 py-8 text-sm text-center bg-gray-50">
+                                Não há registros de pagamentos para este prestador.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Only show buttons for company users */}
+              {userRole?.role === 'company' && (
+                <div className="flex justify-end mt-6 gap-3">
+                  <button
+                    onClick={handleEditClick}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
+                    <PencilIcon className="h-4 w-4" />
+                    Editar
+                  </button>
+                  
+                  {contractor.ativo && (
+                    <button
+                      onClick={handleInactivate}
+                      disabled={isUpdating}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 disabled:opacity-50"
+                    >
+                      <UserXIcon className="h-4 w-4" />
+                      {isUpdating ? 'Processando...' : 'Inativar'}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
           </div>
-          <div className="mt-8 border-t pt-8">
-            <div className="flex justify-end">
-              {/* Placeholder text removed */}
-              {/* <p className="text-sm text-gray-500 italic">Ação de inativar (como na dashboard) ainda não implementada nesta página.</p> */}
-            </div>
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4 mx-auto max-w-md">
+            <AlertCircleIcon className="h-6 w-6 text-yellow-400 mx-auto mb-2" />
+            <p className="text-yellow-700">Prestador não encontrado.</p>
           </div>
         </div>
-        <div className="p-6 border-t border-gray-200 mt-4 flex justify-end items-center space-x-4">
-          <button
-            onClick={handleEditClick}
-            disabled={isUpdating || isDownloading}
-            className="flex items-center text-sm text-gray-600 hover:text-gray-800 focus:outline-none disabled:opacity-50 transition duration-150 ease-in-out"
-            title="Editar Prestador"
-          >
-            <PencilIcon className="h-4 w-4 mr-1.5" />
-            Editar
-          </button>
-          {contractor.ativo && (
-            <button
-              onClick={handleInactivate}
-              disabled={isUpdating || isDownloading}
-              className="flex items-center px-4 py-2 text-sm bg-red-600 text-white rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 transition duration-150 ease-in-out"
-              title="Tornar Prestador Inativo"
-            >
-              {isUpdating && !contractor.ativo ? <RefreshCwIcon className="animate-spin h-4 w-4 mr-1.5" /> : <UserXIcon className="h-4 w-4 mr-1.5" />}
-              {isUpdating && !contractor.ativo ? 'Inativando...' : 'Tornar Inativo'}
-            </button>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 };
