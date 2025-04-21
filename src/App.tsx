@@ -80,7 +80,7 @@ const AppRoutes = () => {
           <Route path="prestador/:id" element={<ContractorDetailPage />} />
           <Route path="prestador/:id/editar" element={<EditContractorPage />} />
           <Route path="pagamentos" element={<PaymentsPage />} />
-          <Route path="pagamentos/lote" element={<BatchPaymentPage />} />
+          <Route path="folha" element={<BatchPaymentPage />} />
           <Route path="adicionar-prestador" element={<AddContractorPage />} />
           <Route path="configuracoes" element={<SettingsPage />} />
         </Route>

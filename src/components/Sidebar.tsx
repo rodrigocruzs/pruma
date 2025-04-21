@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { HomeIcon, UsersIcon, CreditCardIcon, Loader2Icon } from 'lucide-react';
+import { HomeIcon, UsersIcon, CreditCardIcon, Loader2Icon, Receipt } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabaseClient';
 
@@ -81,6 +81,20 @@ const Sidebar = () => {
               >
                 <HomeIcon className="h-5 w-5 mr-3" />
                 <span>Dashboard</span>
+              </NavLink>
+            )}
+            
+            {!isPrestador && (
+              <NavLink 
+                to="/dashboard/folha" 
+                className={({isActive}) => 
+                  `flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 ${
+                    isActive ? 'bg-gray-100 border-l-4 border-blue-500' : ''
+                  }`
+                }
+              >
+                <Receipt className="h-5 w-5 mr-3" />
+                <span>Folha PJ</span>
               </NavLink>
             )}
             

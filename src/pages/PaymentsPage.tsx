@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CreditCardIcon, CheckCircleIcon, AlertCircleIcon, XCircleIcon, FileTextIcon, Loader2Icon } from 'lucide-react';
+import { CreditCardIcon, CheckCircleIcon, AlertCircleIcon, XCircleIcon, FileTextIcon, Loader2Icon, Receipt } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import InvoiceUpload from '../components/InvoiceUpload';
 import InvoiceView from '../components/InvoiceView';
@@ -265,11 +265,11 @@ const PaymentsPage = () => {
         <div className="flex items-center gap-4">
           {userRole?.role === 'company' && (
             <button
-              onClick={() => navigate('/dashboard/pagamentos/lote')}
+              onClick={() => navigate('/dashboard/folha')}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              <CreditCardIcon className="h-5 w-5 mr-2" />
-              Criar Folha PJ
+              <Receipt className="h-5 w-5 mr-2" />
+              Folha PJ
             </button>
           )}
           {selectedPayments.length > 0 && (
