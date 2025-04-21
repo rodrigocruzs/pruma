@@ -154,41 +154,13 @@ const LandingPage = () => {
         {/* Footer */}
         <footer className="bg-gray-800 text-white py-12">
           <div className="container mx-auto px-6">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div>
-                <h3 className="text-lg font-bold mb-4">Folha PJ</h3>
-                <p className="text-gray-400">
-                  A solução completa para gestão de prestadores de serviço PJ.
-                </p>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold mb-4">Produto</h4>
-                <ul className="space-y-2">
-                  <li><a href="#" className="text-gray-400 hover:text-white">Recursos</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Preços</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Clientes</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Novidades</a></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold mb-4">Empresa</h4>
-                <ul className="space-y-2">
-                  <li><a href="#" className="text-gray-400 hover:text-white">Sobre nós</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Blog</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Carreiras</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Contato</a></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold mb-4">Legal</h4>
-                <ul className="space-y-2">
-                  <li><a href="#" className="text-gray-400 hover:text-white">Termos de Uso</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Privacidade</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Cookies</a></li>
-                </ul>
-              </div>
+            <div className="text-center">
+              <h3 className="text-lg font-bold mb-4">Folha PJ</h3>
+              <p className="text-gray-400">
+                A solução completa para gestão de prestadores de serviço PJ.
+              </p>
             </div>
-            <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+            <div className="mt-12 pt-8 text-center text-gray-400">
               <p>&copy; {new Date().getFullYear()} Folha PJ. Todos os direitos reservados.</p>
             </div>
           </div>
