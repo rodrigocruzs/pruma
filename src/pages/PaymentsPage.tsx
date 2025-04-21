@@ -6,6 +6,11 @@ import InvoiceView from '../components/InvoiceView';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+// Interface with additional fields for CSV data
+interface PaymentWithPixKey extends Payment {
+  chave_pix?: string | null;
+}
+
 interface Payment {
   id: string;
   prestador_id: string;
@@ -179,11 +184,77 @@ const PaymentsPage = () => {
     }
   };
 
+  // Generate CSV content
+  const generateCSV = (paymentsWithPixKeys: PaymentWithPixKey[]): string => {
+    // CSV header
+    let csvContent = 'Chave PIX,Valor,Nome\n';
+    
+    // Add data rows
+    paymentsWithPixKeys.forEach(payment => {
+      const nome = `${payment.prestador_nome} ${payment.prestador_sobrenome}`;
+      const valor = payment.valor.toString().replace('.', ','); // Format for Brazilian CSV
+      const chavePix = payment.chave_pix || '';
+      
+      // Escape fields if they contain commas
+      const escapedNome = nome.includes(',') ? `"${nome}"` : nome;
+      const escapedChavePix = chavePix.includes(',') ? `"${chavePix}"` : chavePix;
+      
+      csvContent += `${escapedChavePix},${valor},${escapedNome}\n`;
+    });
+    
+    return csvContent;
+  };
+
+  // Download CSV file
+  const downloadCSV = (csvContent: string, filename: string): void => {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleProcessSelected = async () => {
     if (!supabase) return;
     
     setProcessingPayments(true);
     try {
+      // Step 1: Get PIX keys for the selected payments
+      const selectedPaymentDetails = payments.filter(p => selectedPayments.includes(p.id));
+      const prestadorIds = selectedPaymentDetails.map(p => p.prestador_id);
+      
+      // Fetch PIX keys from PrestadorPJ table
+      const { data: prestadores, error: pixKeyError } = await supabase
+        .from('PrestadorPJ')
+        .select('id, chave_pix')
+        .in('id', prestadorIds);
+      
+      if (pixKeyError) throw pixKeyError;
+      
+      // Create a map of prestador_id to PIX key for easy lookup
+      const pixKeyMap = (prestadores || []).reduce((map, prestador) => {
+        map[prestador.id] = prestador.chave_pix;
+        return map;
+      }, {} as Record<string, string | null>);
+      
+      // Combine payment data with PIX keys
+      const paymentsWithPixKeys: PaymentWithPixKey[] = selectedPaymentDetails.map(payment => ({
+        ...payment,
+        chave_pix: pixKeyMap[payment.prestador_id] || null
+      }));
+      
+      // Step 2: Generate and download CSV
+      const csvContent = generateCSV(paymentsWithPixKeys);
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      downloadCSV(csvContent, `pagamentos-${timestamp}.csv`);
+      
+      // Step 3: Update payment status to 'pago'
       const { error: updateError } = await supabase
         .from('Pagamento')
         .update({ status: 'pago' })
@@ -263,15 +334,6 @@ const PaymentsPage = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Pagamentos</h1>
         <div className="flex items-center gap-4">
-          {userRole?.role === 'company' && (
-            <button
-              onClick={() => navigate('/dashboard/folha')}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              <Receipt className="h-5 w-5 mr-2" />
-              Folha PJ
-            </button>
-          )}
           {selectedPayments.length > 0 && (
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">
@@ -286,7 +348,7 @@ const PaymentsPage = () => {
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <CreditCardIcon className="h-5 w-5 mr-2" />
-                {processingPayments ? 'Processando...' : 'Processar Selecionados'}
+                {processingPayments ? 'Processando...' : 'Processar e Download CSV'}
               </button>
             </div>
           )}
