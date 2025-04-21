@@ -39,10 +39,12 @@ const LandingPage = () => {
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/2 md:pr-12">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
-                  Simplifique a gestão dos seus Prestadores PJ
+                  Gestão de PJs feita para quem empreende
                 </h1>
                 <p className="text-xl text-gray-600 mb-8">
-                  Onboarding, pagamentos e notas fiscais em um único lugar. Economize tempo e evite dores de cabeça com a plataforma mais completa do mercado.
+                Tiramos da sua frente toda a burocracia: do onboarding ao offboarding. 
+                Centralize pagamentos, notas fiscais, contratos e relatórios em uma única plataforma — 
+                para você focar no crescimento do seu negócio, não em planilhas.
                 </p>
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                   <Link 
@@ -71,7 +73,7 @@ const LandingPage = () => {
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Tudo o que você precisa para gerenciar seus PJs</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Nossa plataforma foi desenvolvida pensando nas necessidades de empresas que trabalham com prestadores de serviço PJ.
+              Da contratação ao encerramento: tudo o que você precisa para gerenciar prestadores de serviço sem perder tempo nem ficar preso em burocrática.
               </p>
             </div>
 
@@ -79,9 +81,9 @@ const LandingPage = () => {
               {/* Feature 1 */}
               <div className="bg-[#FCF8EE] p-8 rounded-lg shadow-sm border border-[#FCF8EE]">
                 <Users className="h-12 w-12 text-[#C49A22] mb-6" />
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Onboarding Simplificado</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Cadastro Simplificado</h3>
                 <p className="text-gray-600">
-                  Adicione novos prestadores em minutos, com um processo digital e sem burocracia. Envie convites por email e permita que eles completem seus dados.
+                  Adicione novos PJs em segundos, colete documentos e valide tudo de forma automática — sem planilhas e sem e-mails perdidos.
                 </p>
               </div>
 
@@ -90,7 +92,7 @@ const LandingPage = () => {
                 <FileText className="h-12 w-12 text-[#C49A22] mb-6" />
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Gestão de Notas Fiscais</h3>
                 <p className="text-gray-600">
-                  Receba, organize e armazene notas fiscais dos seus prestadores. Acompanhe facilmente o status de cada documento fiscal.
+                  Receba, organize e armazene notas fiscais dos seus PJs. Acompanhe facilmente o status de cada documento fiscal.
                 </p>
               </div>
 
@@ -108,7 +110,7 @@ const LandingPage = () => {
                 <Calendar className="h-12 w-12 text-[#C49A22] mb-6" />
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Controle de Contratos</h3>
                 <p className="text-gray-600">
-                  Armazene contratos digitais, configure prazos e receba alertas de renovação. Mantenha tudo organizado e acessível.
+                  Armazene contratos digitais e compartilhe com os PJs. Mantenha tudo organizado e acessível.
                 </p>
               </div>
             </div>
@@ -120,13 +122,13 @@ const LandingPage = () => {
           <div className="container mx-auto px-6 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Pronto para simplificar a gestão dos seus PJs?</h2>
             <p className="text-xl text-white opacity-90 mb-8 max-w-3xl mx-auto">
-              Inicie sua jornada hoje mesmo e experimente como é fácil gerenciar prestadores de serviço com a Pruma.
+              Experimente como é fácil gerenciar PJs com a Pruma.
             </p>
             <Link
               to="/signup"
               className="px-8 py-4 bg-white text-[#C49A22] text-lg font-medium rounded-md hover:bg-[#FCF8EE] transition duration-150 inline-flex items-center"
             >
-              Criar Minha Conta Grátis
+              Criar Minha Conta
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </div>
@@ -141,7 +143,7 @@ const LandingPage = () => {
                 <h3 className="text-lg font-bold text-[#C49A22]">Pruma</h3>
               </div>
               <p className="text-gray-600">
-                A solução completa para gestão de prestadores de serviço PJ.
+                A solução completa para gestão de PJs.
               </p>
             </div>
             <div className="mt-12 pt-8 text-center text-gray-600 border-t border-gray-200">
