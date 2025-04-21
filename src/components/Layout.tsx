@@ -94,7 +94,7 @@ const Layout = () => {
                           onClick={() => {
                             console.log("Layout: Navigating to prestador details:", userRole?.prestador_id);
                             setIsDropdownOpen(false);
-                            navigate(`/prestador/${userRole?.prestador_id}`);
+                            navigate(`/dashboard/prestador/${userRole?.prestador_id}`);
                           }}
                           className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >

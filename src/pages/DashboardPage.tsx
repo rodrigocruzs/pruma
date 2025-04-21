@@ -40,7 +40,7 @@ const DashboardPage = () => {
           // If user is a prestador, redirect them to the payments page instead of details page
           if (data[0].role === 'prestador' && data[0].prestador_id) {
             // Navigate to the payments page
-            navigate('/pagamentos', { replace: true });
+            navigate('/dashboard/pagamentos', { replace: true });
           }
         } else {
           // No role found, create a default company role
