@@ -235,7 +235,9 @@ const PrestadorSignUpPage = () => {
       }
 
       toast.success('Senha atualizada com sucesso! Redirecionando para o dashboard...');
-      navigate('/prestador/dashboard');
+      
+      // Redirect to the main dashboard, which will then redirect to the prestador's own page
+      navigate('/');
       
     } catch (err: any) {
       console.error('Process error:', err);

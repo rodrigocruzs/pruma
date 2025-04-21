@@ -1,0 +1,317 @@
+{
+  "NotaFiscal": {
+    "count": 3,
+    "schema": {
+      "id": {
+        "type": "string",
+        "example": "999ff073-6874-4dab-a98a-ab10a6b1f618",
+        "nullable": false
+      },
+      "created_at": {
+        "type": "string",
+        "example": "2025-04-19T14:47:04.473578+00:00",
+        "nullable": false
+      },
+      "arquivo_path": {
+        "type": "string",
+        "example": "temp/fdac33fe-2fe1-4a04-9617-7413862c02a6_1745074023951.pdf",
+        "nullable": false
+      },
+      "data_emissao": {
+        "type": "string",
+        "example": "2025-04-19",
+        "nullable": false
+      },
+      "chave_nfe": {
+        "type": "object",
+        "example": null,
+        "nullable": true
+      },
+      "status_validacao": {
+        "type": "string",
+        "example": "Pendente",
+        "nullable": false
+      },
+      "created_by": {
+        "type": "string",
+        "example": "b8e80aa4-6241-4076-9092-bbe493d867f3",
+        "nullable": false
+      }
+    }
+  },
+  "Pagamento": {
+    "count": 41,
+    "schema": {
+      "id": {
+        "type": "string",
+        "example": "66b67282-49d6-4895-a6ca-ce2c02bce3ab",
+        "nullable": false
+      },
+      "created_at": {
+        "type": "string",
+        "example": "2025-04-19T18:31:07.231+00:00",
+        "nullable": false
+      },
+      "prestador_id": {
+        "type": "string",
+        "example": "4042c494-cd4a-4a46-bbc0-114be5d12b00",
+        "nullable": false
+      },
+      "data": {
+        "type": "string",
+        "example": "2025-04-19",
+        "nullable": false
+      },
+      "valor": {
+        "type": "number",
+        "example": 2020,
+        "nullable": false
+      },
+      "comissao": {
+        "type": "number",
+        "example": 0,
+        "nullable": false
+      },
+      "status": {
+        "type": "string",
+        "example": "pago",
+        "nullable": false
+      },
+      "nf_id": {
+        "type": "string",
+        "example": "73907559-f4b9-42d4-a2ae-813b60d0f290",
+        "nullable": false
+      },
+      "mes_referente": {
+        "type": "string",
+        "example": "2025-04-01",
+        "nullable": false
+      },
+      "created_by": {
+        "type": "string",
+        "example": "b1b87d58-7587-4859-a126-a603f4b5171b",
+        "nullable": false
+      }
+    }
+  },
+  "PrestadorPJ": {
+    "count": 30,
+    "schema": {
+      "id": {
+        "type": "string",
+        "example": "53958d26-5513-464c-8fc9-d27b42e1e9b0",
+        "nullable": false
+      },
+      "created_at": {
+        "type": "string",
+        "example": "2025-04-19T14:37:40.009148+00:00",
+        "nullable": false
+      },
+      "nome": {
+        "type": "string",
+        "example": "John",
+        "nullable": false
+      },
+      "sobrenome": {
+        "type": "string",
+        "example": "Tesla",
+        "nullable": false
+      },
+      "email": {
+        "type": "string",
+        "example": "tesla@gmail.com",
+        "nullable": false
+      },
+      "nascimento": {
+        "type": "string",
+        "example": "2000-01-01",
+        "nullable": false
+      },
+      "funcao": {
+        "type": "string",
+        "example": "CEO",
+        "nullable": false
+      },
+      "data_inicio": {
+        "type": "string",
+        "example": "2000-01-01",
+        "nullable": false
+      },
+      "remuneracao": {
+        "type": "number",
+        "example": 400,
+        "nullable": false
+      },
+      "endereco_logradouro": {
+        "type": "string",
+        "example": "Rua das Cores, 91",
+        "nullable": false
+      },
+      "endereco_cidade": {
+        "type": "string",
+        "example": "London",
+        "nullable": false
+      },
+      "status_contrato": {
+        "type": "string",
+        "example": "Ativo",
+        "nullable": false
+      },
+      "ativo": {
+        "type": "boolean",
+        "example": true,
+        "nullable": false
+      },
+      "chave_pix": {
+        "type": "string",
+        "example": "999990999",
+        "nullable": false
+      },
+      "razao_social": {
+        "type": "string",
+        "example": "Tesla Inc",
+        "nullable": false
+      },
+      "cnpj": {
+        "type": "string",
+        "example": "00203020320320",
+        "nullable": false
+      },
+      "telefone_contato": {
+        "type": "string",
+        "example": "10202020022",
+        "nullable": false
+      },
+      "contrato_path": {
+        "type": "string",
+        "example": "contratos/53958d26-5513-464c-8fc9-d27b42e1e9b0/1745073460019_right_to_rent.pdf",
+        "nullable": false
+      },
+      "created_by": {
+        "type": "string",
+        "example": "9dc90c6d-e5c7-4af4-b57d-d7fdd4271f6f",
+        "nullable": false
+      }
+    }
+  },
+  "company_settings": {
+    "count": 22,
+    "schema": {
+      "id": {
+        "type": "string",
+        "example": "30d5addb-530d-4996-825b-641bbbc26184",
+        "nullable": false
+      },
+      "user_id": {
+        "type": "string",
+        "example": "a71cfd39-48ff-486a-a00e-ae1bb4782d17",
+        "nullable": false
+      },
+      "company_name": {
+        "type": "string",
+        "example": "Acme",
+        "nullable": false
+      },
+      "razao_social": {
+        "type": "string",
+        "example": "Acme Ltda",
+        "nullable": false
+      },
+      "cnpj": {
+        "type": "string",
+        "example": "33.912.356/0001-50",
+        "nullable": false
+      },
+      "endereco": {
+        "type": "string",
+        "example": "Rua das Acacias, 83",
+        "nullable": false
+      },
+      "cidade": {
+        "type": "string",
+        "example": "Sao Paulo",
+        "nullable": false
+      },
+      "estado": {
+        "type": "string",
+        "example": "SP",
+        "nullable": false
+      },
+      "cep": {
+        "type": "string",
+        "example": "05410-020",
+        "nullable": false
+      },
+      "created_at": {
+        "type": "string",
+        "example": "2025-04-19T16:19:59.862728+00:00",
+        "nullable": false
+      },
+      "updated_at": {
+        "type": "string",
+        "example": "2025-04-19T16:22:06.297742+00:00",
+        "nullable": false
+      }
+    }
+  },
+  "user_profiles": {
+    "count": 22,
+    "schema": {
+      "id": {
+        "type": "string",
+        "example": "b942f1ff-2e66-4734-a80e-f2d833222993",
+        "nullable": false
+      },
+      "user_id": {
+        "type": "string",
+        "example": "a71cfd39-48ff-486a-a00e-ae1bb4782d17",
+        "nullable": false
+      },
+      "first_name": {
+        "type": "string",
+        "example": "Rodrigo",
+        "nullable": false
+      },
+      "last_name": {
+        "type": "string",
+        "example": "Cruz",
+        "nullable": false
+      },
+      "created_at": {
+        "type": "string",
+        "example": "2025-04-19T16:20:00.166098+00:00",
+        "nullable": false
+      },
+      "updated_at": {
+        "type": "string",
+        "example": "2025-04-19T16:22:36.178241+00:00",
+        "nullable": false
+      }
+    }
+  },
+  "user_roles": {
+    "count": 6,
+    "schema": {
+      "id": {
+        "type": "string",
+        "example": "a71cfd39-48ff-486a-a00e-ae1bb4782d17",
+        "nullable": false
+      },
+      "role": {
+        "type": "string",
+        "example": "company",
+        "nullable": false
+      },
+      "prestador_id": {
+        "type": "object",
+        "example": null,
+        "nullable": true
+      },
+      "created_at": {
+        "type": "string",
+        "example": "2025-04-20T05:47:47.111119+00:00",
+        "nullable": false
+      }
+    }
+  }
+}

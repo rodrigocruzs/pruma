@@ -1,0 +1,26 @@
+[
+  {
+    "table": "Empresa",
+    "count": null
+  },
+  {
+    "table": "Pagamento",
+    "count": 41
+  },
+  {
+    "table": "PrestadorPJ",
+    "count": 30
+  },
+  {
+    "table": "NotaFiscal",
+    "count": 3
+  },
+  {
+    "table": "Config",
+    "count": null
+  },
+  {
+    "table": "Settings",
+    "count": null
+  }
+]

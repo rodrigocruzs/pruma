@@ -43,9 +43,24 @@ const PaymentsPage = () => {
   const [invoiceError, setInvoiceError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // Define pendingPayments at the beginning
+  const pendingPayments = payments.filter(payment => payment.status === 'pendente');
+  
   useEffect(() => {
     fetchUserRole();
   }, []);
+
+  // Reset selected payments when component mounts
+  useEffect(() => {
+    setSelectedPayments([]);
+  }, []);
+
+  // Clear selections when pendingPayments becomes empty
+  useEffect(() => {
+    if (pendingPayments.length === 0) {
+      setSelectedPayments([]);
+    }
+  }, [pendingPayments.length]);
 
   const fetchUserRole = async () => {
     if (!user) {
@@ -128,6 +143,8 @@ const PaymentsPage = () => {
       }));
 
       setPayments(formattedPayments);
+      // Reset selected payments when loading new data
+      setSelectedPayments([]);
     } catch (err: any) {
       console.error('Error fetching payments:', err);
       setError('Falha ao carregar pagamentos.');
@@ -190,14 +207,15 @@ const PaymentsPage = () => {
   };
 
   const handleSelectAll = () => {
-    if (selectedPayments.length === pendingPayments.length) {
+    // If all pending payments are currently selected, deselect all
+    if (pendingPayments.length > 0 && selectedPayments.length === pendingPayments.length) {
       setSelectedPayments([]);
     } else {
+      // Otherwise, select all pending payments
       setSelectedPayments(pendingPayments.map(p => p.id));
     }
   };
 
-  const pendingPayments = payments.filter(payment => payment.status === 'pendente');
   const selectedTotal = payments
     .filter(payment => selectedPayments.includes(payment.id))
     .reduce((sum, payment) => sum + payment.valor, 0);
@@ -247,7 +265,7 @@ const PaymentsPage = () => {
         <div className="flex items-center gap-4">
           {userRole?.role === 'company' && (
             <button
-              onClick={() => navigate('/pagamentos/lote')}
+              onClick={() => navigate('/dashboard/pagamentos/lote')}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               <CreditCardIcon className="h-5 w-5 mr-2" />
@@ -324,12 +342,20 @@ const PaymentsPage = () => {
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    checked={selectedPayments.length === pendingPayments.length && pendingPayments.length > 0}
-                    onChange={handleSelectAll}
-                    className="rounded border-gray-300 text-blue-600"
-                  />
+                  {pendingPayments.length > 0 ? (
+                    <input 
+                      type="checkbox" 
+                      checked={selectedPayments.length === pendingPayments.length}
+                      onChange={handleSelectAll}
+                      className="rounded border-gray-300 text-blue-600"
+                    />
+                  ) : (
+                    <input 
+                      type="checkbox" 
+                      disabled
+                      className="rounded border-gray-300 text-gray-400 cursor-not-allowed"
+                    />
+                  )}
                 </label>
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

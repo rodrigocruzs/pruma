@@ -231,7 +231,7 @@ const EditContractorPage = () => {
       }
 
       // Navigate back to the contractor details page
-      window.location.href = `/prestador/${id}`;
+      window.location.href = `/dashboard/prestador/${id}`;
     } catch (err: any) {
       console.error('Error updating contractor:', err);
       setError(`Falha ao atualizar prestador: ${err.message}`);

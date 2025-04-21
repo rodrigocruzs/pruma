@@ -283,7 +283,7 @@ const ContractorDetailPage = () => {
 
   const handleEditClick = () => {
     if (!contractor) return;
-    navigate(`/prestador/${contractor.id}/editar`);
+    navigate(`/dashboard/prestador/${contractor.id}/editar`);
   };
 
   const getStatusBadgeClass = (status: Payment['status']) => {
@@ -338,14 +338,13 @@ const ContractorDetailPage = () => {
               {/* Only show back button for company users */}
               {userRole?.role === 'company' && (
                 <button
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate('/dashboard')}
                   className="p-2 rounded-full hover:bg-gray-100"
                   aria-label="Voltar"
                 >
                   <ArrowLeftIcon className="h-5 w-5 text-gray-600" />
                 </button>
               )}
-              <h1 className="text-2xl font-bold">{contractor.nome} {contractor.sobrenome}</h1>
             </div>
           </div>
 
