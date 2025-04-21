@@ -204,7 +204,7 @@ const BatchPaymentPage = () => {
   if (initialLoading) {
     return (
       <div className="container mx-auto p-6 text-center">
-        <Loader2Icon className="animate-spin h-8 w-8 mx-auto mb-4 text-blue-600" />
+        <Loader2Icon className="animate-spin h-8 w-8 mx-auto mb-4 text-[#C49A22]" />
         <p className="text-gray-600">Carregando prestadores...</p>
       </div>
     );
@@ -216,16 +216,16 @@ const BatchPaymentPage = () => {
           {error}
         </div>
       )}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          Folha PJ
+        </h1>
+      </div>
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-6 border-b">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Criar Pagamentos em Lote
-          </h1>
-        </div>
         <div className="p-6">
           <div className="mb-6">
             <label className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" checked={selectedContractors.length === contractors.length} onChange={handleSelectAll} />
+              <input type="checkbox" className="rounded border-gray-300 text-[#C49A22] shadow-sm focus:border-[#C49A22] focus:ring focus:ring-[#C49A22] focus:ring-opacity-50" checked={selectedContractors.length === contractors.length} onChange={handleSelectAll} />
               <span className="ml-2 text-gray-700">Selecionar Todos</span>
             </label>
           </div>
@@ -262,7 +262,7 @@ const BatchPaymentPage = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {contractors.map(contractor => <tr key={contractor.id}>
                     <td className="px-3 py-4 whitespace-nowrap">
-                      <input type="checkbox" className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" checked={selectedContractors.includes(contractor.id)} onChange={() => handleSelectContractor(contractor.id)} />
+                      <input type="checkbox" className="rounded border-gray-300 text-[#C49A22] shadow-sm focus:border-[#C49A22] focus:ring focus:ring-[#C49A22] focus:ring-opacity-50" checked={selectedContractors.includes(contractor.id)} onChange={() => handleSelectContractor(contractor.id)} />
                     </td>
                     <td className="px-3 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900">
@@ -329,11 +329,8 @@ const BatchPaymentPage = () => {
               <div className="text-lg font-medium">
                 Total selecionado: {formatCurrency(totalAmount)}
               </div>
-              <button onClick={handleCreatePayments} disabled={selectedContractors.length === 0 || loading} className={`flex items-center px-4 py-2 rounded-md ${selectedContractors.length === 0 || loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
-                {loading ? 'Processando...' : <>
-                    <Receipt className="h-5 w-5 mr-2" />
-                    Criar Pagamentos
-                  </>}
+              <button onClick={handleCreatePayments} disabled={selectedContractors.length === 0 || loading} className={`flex items-center px-4 py-2 rounded-md ${selectedContractors.length === 0 || loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#C49A22] text-white hover:bg-[#A37F1C]'}`}>
+                {loading ? 'Processando...' : 'Criar Folha PJ'}
               </button>
             </div>
           </div>
@@ -355,13 +352,13 @@ const BatchPaymentPage = () => {
               <div className="mt-6 flex justify-center gap-3">
                 <button
                   onClick={() => navigate('/dashboard/pagamentos')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#C49A22] hover:bg-[#A37F1C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C49A22]"
                 >
                   Ir para Pagamentos
                 </button>
                 <button
                   onClick={() => navigate('/dashboard')}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C49A22]"
                 >
                   Voltar ao Dashboard
                 </button>

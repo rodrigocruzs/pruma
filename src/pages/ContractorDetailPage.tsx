@@ -397,7 +397,7 @@ const ContractorDetailPage = () => {
                   {contractor.contrato_path ? (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <FileIcon className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0" />
+                        <FileIcon className="h-5 w-5 text-[#C49A22] mr-3 flex-shrink-0" />
                         <div>
                           <p className="font-medium text-gray-800 truncate max-w-xs" title={contractor.contrato_path.split('/').pop()}>
                             {contractor.contrato_path.split('/').pop() || 'Contrato Anexado'}
@@ -407,7 +407,7 @@ const ContractorDetailPage = () => {
                       <button
                         onClick={handleDownloadContract}
                         disabled={isDownloading}
-                        className="flex items-center px-4 py-2 text-sm bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition duration-150 ease-in-out"
+                        className="flex items-center px-4 py-2 text-sm bg-[#C49A22] text-white rounded-md shadow-sm hover:bg-[#A37F1C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C49A22] disabled:opacity-50 transition duration-150 ease-in-out"
                       >
                         {isDownloading ? (
                           <Loader2Icon className="animate-spin h-4 w-4 mr-2" />
@@ -611,7 +611,7 @@ const ContractorDetailPage = () => {
                 <div className="flex justify-end mt-6 gap-3">
                   <button
                     onClick={handleEditClick}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#C49A22] text-white rounded-md hover:bg-[#A37F1C]"
                   >
                     <PencilIcon className="h-4 w-4" />
                     Editar

@@ -311,7 +311,7 @@ const PaymentsPage = () => {
   if (loading) {
     return (
       <div className="container mx-auto p-6 text-center">
-        <Loader2Icon className="animate-spin h-8 w-8 mx-auto mb-4 text-blue-600" />
+        <Loader2Icon className="animate-spin h-8 w-8 mx-auto mb-4 text-[#C49A22]" />
         <p className="text-gray-600">Carregando pagamentos...</p>
       </div>
     );
@@ -345,7 +345,7 @@ const PaymentsPage = () => {
               <button 
                 onClick={handleProcessSelected} 
                 disabled={processingPayments} 
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center px-4 py-2 bg-[#C49A22] text-white rounded-md hover:bg-[#A37F1C] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <CreditCardIcon className="h-5 w-5 mr-2" />
                 {processingPayments ? 'Processando...' : 'Processar e Download CSV'}
@@ -409,7 +409,7 @@ const PaymentsPage = () => {
                       type="checkbox" 
                       checked={selectedPayments.length === pendingPayments.length}
                       onChange={handleSelectAll}
-                      className="rounded border-gray-300 text-blue-600"
+                      className="rounded border-gray-300 text-[#C49A22]"
                     />
                   ) : (
                     <input 
@@ -449,7 +449,7 @@ const PaymentsPage = () => {
                       type="checkbox"
                       checked={selectedPayments.includes(payment.id)}
                       onChange={() => handleSelectPayment(payment.id)}
-                      className="rounded border-gray-300 text-blue-600"
+                      className="rounded border-gray-300 text-[#C49A22]"
                     />
                   )}
                 </td>

@@ -231,43 +231,43 @@ const AddContractorPage = () => {
                   <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-1">
                     Nome *
                   </label>
-                  <input type="text" id="nome" name="nome" required value={formData.nome} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="text" id="nome" name="nome" required value={formData.nome} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="sobrenome" className="block text-sm font-medium text-gray-700 mb-1">
                     Sobrenome *
                   </label>
-                  <input type="text" id="sobrenome" name="sobrenome" required value={formData.sobrenome} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="text" id="sobrenome" name="sobrenome" required value={formData.sobrenome} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="razao_social" className="block text-sm font-medium text-gray-700 mb-1">
                     Razão Social *
                   </label>
-                  <input type="text" id="razao_social" name="razao_social" required value={formData.razao_social} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="text" id="razao_social" name="razao_social" required value={formData.razao_social} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="cnpj" className="block text-sm font-medium text-gray-700 mb-1">
                     CNPJ
                   </label>
-                  <input type="text" id="cnpj" name="cnpj" value={formData.cnpj} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" placeholder="00.000.000/0000-00" />
+                  <input type="text" id="cnpj" name="cnpj" value={formData.cnpj} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" placeholder="00.000.000/0000-00" />
                 </div>
                 <div>
                   <label htmlFor="nascimento" className="block text-sm font-medium text-gray-700 mb-1">
                     Data de Nascimento (Responsável)
                   </label>
-                  <input type="date" id="nascimento" name="nascimento" value={formData.nascimento} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="date" id="nascimento" name="nascimento" value={formData.nascimento} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     E-mail *
                   </label>
-                  <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="telefone_contato" className="block text-sm font-medium text-gray-700 mb-1">
                     Telefone de Contato
                   </label>
-                  <input type="text" id="telefone_contato" name="telefone_contato" value={formData.telefone_contato} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" placeholder="(XX) XXXXX-XXXX" />
+                  <input type="text" id="telefone_contato" name="telefone_contato" value={formData.telefone_contato} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" placeholder="(XX) XXXXX-XXXX" />
                 </div>
               </div>
             </div>
@@ -282,13 +282,13 @@ const AddContractorPage = () => {
                   <label htmlFor="funcao" className="block text-sm font-medium text-gray-700 mb-1">
                     Função
                   </label>
-                  <input type="text" id="funcao" name="funcao" value={formData.funcao} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="text" id="funcao" name="funcao" value={formData.funcao} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="data_inicio" className="block text-sm font-medium text-gray-700 mb-1">
                     Data de Início *
                   </label>
-                  <input type="date" id="data_inicio" name="data_inicio" required value={formData.data_inicio} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="date" id="data_inicio" name="data_inicio" required value={formData.data_inicio} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="remuneracao" className="block text-sm font-medium text-gray-700 mb-1">
@@ -300,7 +300,7 @@ const AddContractorPage = () => {
                     name="remuneracao"
                     value={formData.remuneracao}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm"
                     placeholder="R$ 0,00"
                   />
                 </div>
@@ -314,13 +314,13 @@ const AddContractorPage = () => {
                   <label htmlFor="endereco_logradouro" className="block text-sm font-medium text-gray-700 mb-1">
                     Logradouro e Número
                   </label>
-                  <input type="text" id="endereco_logradouro" name="endereco_logradouro" value={formData.endereco_logradouro} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="text" id="endereco_logradouro" name="endereco_logradouro" value={formData.endereco_logradouro} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
                 <div>
                   <label htmlFor="endereco_cidade" className="block text-sm font-medium text-gray-700 mb-1">
                     Cidade
                   </label>
-                  <input type="text" id="endereco_cidade" name="endereco_cidade" value={formData.endereco_cidade} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
+                  <input type="text" id="endereco_cidade" name="endereco_cidade" value={formData.endereco_cidade} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" />
                 </div>
               </div>
             </div>
@@ -335,7 +335,7 @@ const AddContractorPage = () => {
               <label htmlFor="chave_pix" className="block text-sm font-medium text-gray-700 mb-1">
                 Chave PIX
               </label>
-              <input type="text" id="chave_pix" name="chave_pix" value={formData.chave_pix} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória" />
+              <input type="text" id="chave_pix" name="chave_pix" value={formData.chave_pix} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C49A22] focus:border-[#C49A22] shadow-sm" placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória" />
             </div>
           </div>
 
@@ -371,7 +371,7 @@ const AddContractorPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="flex items-center px-4 py-2 bg-[#C49A22] text-white rounded-md hover:bg-[#A37F1C]"
             >
               {loading ? (
                 <>

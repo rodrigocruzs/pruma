@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Users, FileText, CreditCard, Calendar } from 'lucide-react';
+import prumaIcon from '../assets/images/pruma-icon.svg';
+import prumaLogo from '../assets/images/pruma-logo.svg';
+import dashboardScreenshot from '../assets/images/dashboard-screenshot.jpg';
 
 const LandingPage = () => {
   return (
@@ -9,18 +12,19 @@ const LandingPage = () => {
       <header className="sticky top-0 z-10 bg-white shadow-sm">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">Folha PJ</span>
+            <img src={prumaIcon} alt="Pruma Icon" className="h-6 w-6 text-[#C49A22] mr-2" />
+            <span className="text-2xl font-bold text-[#C49A22]">Pruma</span>
           </div>
           <div className="flex items-center space-x-4">
             <Link 
               to="/login"
-              className="px-4 py-2 text-blue-600 font-medium hover:text-blue-800 transition duration-150"
+              className="px-4 py-2 text-[#C49A22] font-medium hover:text-[#A37F1C] transition duration-150"
             >
               Entrar
             </Link>
             <Link 
               to="/signup"
-              className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-150"
+              className="px-4 py-2 bg-[#C49A22] text-white font-medium rounded-md hover:bg-[#A37F1C] transition duration-150"
             >
               Criar Conta
             </Link>
@@ -28,7 +32,7 @@ const LandingPage = () => {
         </div>
       </header>
 
-      <main className="bg-gradient-to-b from-gray-50 to-gray-100">
+      <main className="bg-gradient-to-b from-[#FCF8EE] to-white">
         {/* Hero Section */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-6">
@@ -43,7 +47,7 @@ const LandingPage = () => {
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                   <Link 
                     to="/signup"
-                    className="px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition duration-150 flex items-center justify-center"
+                    className="px-8 py-4 bg-[#C49A22] text-white text-lg font-medium rounded-md hover:bg-[#A37F1C] transition duration-150 flex items-center justify-center"
                   >
                     Comece Agora
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -52,9 +56,9 @@ const LandingPage = () => {
               </div>
               <div className="md:w-1/2 mt-12 md:mt-0">
                 <div 
-                  className="w-full h-64 md:h-80 bg-blue-100 rounded-lg shadow-xl flex items-center justify-center"
+                  className="w-full h-auto overflow-hidden bg-white border-2 border-[#C49A22] rounded-lg shadow-xl transform md:scale-110"
                 >
-                  <span className="text-blue-600 text-2xl font-bold">Folha PJ</span>
+                  <img src={dashboardScreenshot} alt="Pruma Dashboard" className="w-full h-auto object-cover" />
                 </div>
               </div>
             </div>
@@ -71,10 +75,10 @@ const LandingPage = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {/* Feature 1 */}
-              <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-                <Users className="h-12 w-12 text-blue-600 mb-6" />
+              <div className="bg-[#FCF8EE] p-8 rounded-lg shadow-sm border border-[#FCF8EE]">
+                <Users className="h-12 w-12 text-[#C49A22] mb-6" />
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Onboarding Simplificado</h3>
                 <p className="text-gray-600">
                   Adicione novos prestadores em minutos, com um processo digital e sem burocracia. Envie convites por email e permita que eles completem seus dados.
@@ -82,8 +86,8 @@ const LandingPage = () => {
               </div>
 
               {/* Feature 2 */}
-              <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-                <FileText className="h-12 w-12 text-blue-600 mb-6" />
+              <div className="bg-[#FCF8EE] p-8 rounded-lg shadow-sm border border-[#FCF8EE]">
+                <FileText className="h-12 w-12 text-[#C49A22] mb-6" />
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Gestão de Notas Fiscais</h3>
                 <p className="text-gray-600">
                   Receba, organize e armazene notas fiscais dos seus prestadores. Acompanhe facilmente o status de cada documento fiscal.
@@ -91,43 +95,20 @@ const LandingPage = () => {
               </div>
 
               {/* Feature 3 */}
-              <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-                <CreditCard className="h-12 w-12 text-blue-600 mb-6" />
+              <div className="bg-[#FCF8EE] p-8 rounded-lg shadow-sm border border-[#FCF8EE]">
+                <CreditCard className="h-12 w-12 text-[#C49A22] mb-6" />
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Pagamentos Simplificados</h3>
                 <p className="text-gray-600">
-                  Gerencie pagamentos individuais ou em lote. Registre PIX e outras formas de pagamento com facilidade e segurança.
+                  Gerencie pagamentos individuais ou em lote. Gere arquivos CSV prontos para upload no seu Internet Banking, economizando tempo e minimizando erros.
                 </p>
               </div>
 
               {/* Feature 4 */}
-              <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-                <Calendar className="h-12 w-12 text-blue-600 mb-6" />
+              <div className="bg-[#FCF8EE] p-8 rounded-lg shadow-sm border border-[#FCF8EE]">
+                <Calendar className="h-12 w-12 text-[#C49A22] mb-6" />
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Controle de Contratos</h3>
                 <p className="text-gray-600">
                   Armazene contratos digitais, configure prazos e receba alertas de renovação. Mantenha tudo organizado e acessível.
-                </p>
-              </div>
-
-              {/* Feature 5 */}
-              <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-                <CheckCircle className="h-12 w-12 text-blue-600 mb-6" />
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Offboarding Seguro</h3>
-                <p className="text-gray-600">
-                  Encerre a relação com prestadores de forma organizada, garantindo que todos os documentos e pendências sejam finalizados.
-                </p>
-              </div>
-
-              {/* Feature 6 */}
-              <div className="bg-gray-50 p-8 rounded-lg shadow-sm relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-blue-600 text-white px-4 py-1 text-sm font-medium">
-                  Novo
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-600 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Relatórios e Insights</h3>
-                <p className="text-gray-600">
-                  Obtenha relatórios detalhados sobre custos, pagamentos e desempenho. Tome decisões baseadas em dados concretos.
                 </p>
               </div>
             </div>
@@ -135,15 +116,15 @@ const LandingPage = () => {
         </section>
 
         {/* Call To Action */}
-        <section className="py-16 bg-blue-600">
+        <section className="py-16 bg-[#C49A22]">
           <div className="container mx-auto px-6 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Pronto para simplificar a gestão dos seus PJs?</h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Inicie sua jornada hoje mesmo e experimente como é fácil gerenciar prestadores de serviço com a Folha PJ.
+            <p className="text-xl text-white opacity-90 mb-8 max-w-3xl mx-auto">
+              Inicie sua jornada hoje mesmo e experimente como é fácil gerenciar prestadores de serviço com a Pruma.
             </p>
             <Link
               to="/signup"
-              className="px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-md hover:bg-blue-50 transition duration-150 inline-flex items-center"
+              className="px-8 py-4 bg-white text-[#C49A22] text-lg font-medium rounded-md hover:bg-[#FCF8EE] transition duration-150 inline-flex items-center"
             >
               Criar Minha Conta Grátis
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -152,16 +133,19 @@ const LandingPage = () => {
         </section>
 
         {/* Footer */}
-        <footer className="bg-gray-800 text-white py-12">
+        <footer className="bg-[#FCF8EE] text-gray-800 py-12">
           <div className="container mx-auto px-6">
             <div className="text-center">
-              <h3 className="text-lg font-bold mb-4">Folha PJ</h3>
-              <p className="text-gray-400">
+              <div className="flex items-center justify-center mb-4">
+                <img src={prumaIcon} alt="Pruma" className="h-6 w-6 text-[#C49A22] mr-2" />
+                <h3 className="text-lg font-bold text-[#C49A22]">Pruma</h3>
+              </div>
+              <p className="text-gray-600">
                 A solução completa para gestão de prestadores de serviço PJ.
               </p>
             </div>
-            <div className="mt-12 pt-8 text-center text-gray-400">
-              <p>&copy; {new Date().getFullYear()} Folha PJ. Todos os direitos reservados.</p>
+            <div className="mt-12 pt-8 text-center text-gray-600 border-t border-gray-200">
+              <p>&copy; {new Date().getFullYear()} Pruma. Todos os direitos reservados.</p>
             </div>
           </div>
         </footer>

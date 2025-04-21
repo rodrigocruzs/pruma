@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { HomeIcon, UsersIcon, CreditCardIcon, Loader2Icon, Receipt } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabaseClient';
+import prumaIcon from '../assets/images/pruma-icon.svg';
 
 const Sidebar = () => {
   const { user } = useAuth();
@@ -56,15 +57,16 @@ const Sidebar = () => {
   console.log("Sidebar: Current user role:", userRole, "Is Prestador:", isPrestador, "Loading:", loading);
 
   return (
-    <aside className="w-64 bg-white shadow-md hidden md:block">
-      <div className="p-6">
-        <h1 className="text-xl font-bold text-gray-800">Sistema PJ</h1>
+    <aside className="w-64 bg-[#FCF8EE] shadow-md hidden md:block">
+      <div className="p-6 flex items-center">
+        <img src={prumaIcon} alt="Pruma" className="h-6 w-6 text-[#C49A22] mr-2" />
+        <h1 className="text-xl font-bold text-[#C49A22]">Pruma</h1>
       </div>
       <nav className="mt-6">
         {/* Only render nav items once we've determined the role */}
         {loading ? (
           <div className="flex justify-center py-4">
-            <Loader2Icon className="animate-spin h-5 w-5 text-blue-500" />
+            <Loader2Icon className="animate-spin h-5 w-5 text-[#C49A22]" />
           </div>
         ) : (
           <>
@@ -73,8 +75,8 @@ const Sidebar = () => {
               <NavLink 
                 to="/dashboard" 
                 className={({isActive}) => 
-                  `flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 ${
-                    isActive ? 'bg-gray-100 border-l-4 border-blue-500' : ''
+                  `flex items-center px-6 py-3 text-gray-600 hover:bg-white ${
+                    isActive ? 'bg-white border-l-4 border-[#C49A22]' : ''
                   }`
                 } 
                 end
@@ -88,8 +90,8 @@ const Sidebar = () => {
               <NavLink 
                 to="/dashboard/folha" 
                 className={({isActive}) => 
-                  `flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 ${
-                    isActive ? 'bg-gray-100 border-l-4 border-blue-500' : ''
+                  `flex items-center px-6 py-3 text-gray-600 hover:bg-white ${
+                    isActive ? 'bg-white border-l-4 border-[#C49A22]' : ''
                   }`
                 }
               >
@@ -101,8 +103,8 @@ const Sidebar = () => {
             <NavLink 
               to="/dashboard/pagamentos" 
               className={({isActive}) => 
-                `flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100 ${
-                  isActive ? 'bg-gray-100 border-l-4 border-blue-500' : ''
+                `flex items-center px-6 py-3 text-gray-600 hover:bg-white ${
+                  isActive ? 'bg-white border-l-4 border-[#C49A22]' : ''
                 }`
               }
             >

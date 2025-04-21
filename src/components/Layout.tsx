@@ -69,12 +69,12 @@ const Layout = () => {
     <div className="min-h-screen flex bg-gray-100">
       <Sidebar />
       <div className="flex-1 flex flex-col h-screen">
-        <nav className="bg-white shadow-sm">
+        <nav className="bg-[#FCF8EE] shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex">
                 <div className="flex-shrink-0 flex items-center">
-                  {/* Folha PJ text removed */}
+                  {/* Logo removido */}
                 </div>
               </div>
               <div className="flex items-center">
@@ -83,7 +83,7 @@ const Layout = () => {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center p-2"
                   >
-                    <UserCircle className="h-6 w-6 text-gray-600 stroke-[1.5]" />
+                    <UserCircle className="h-6 w-6 text-[#C49A22] stroke-[1.5]" />
                   </button>
 
                   {isDropdownOpen && (

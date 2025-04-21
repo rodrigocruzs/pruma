@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import DashboardPage from './pages/DashboardPage';
 import ContractorDetailPage from './pages/ContractorDetailPage';
@@ -19,6 +19,61 @@ import { SettingsProvider } from './contexts/SettingsContext';
 import { SupabaseProvider } from './contexts/SupabaseContext';
 import { supabase } from './lib/supabaseClient';
 
+// Custom hook to set page title based on route
+const usePageTitle = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const baseTitle = 'Pruma';
+    let pageTitle;
+
+    switch (location.pathname) {
+      case '/':
+        pageTitle = `${baseTitle} | Gestão de Prestadores PJ`;
+        break;
+      case '/login':
+        pageTitle = `${baseTitle} | Entrar`;
+        break;
+      case '/signup':
+        pageTitle = `${baseTitle} | Criar Conta`;
+        break;
+      case '/prestador/signup':
+        pageTitle = `${baseTitle} | Cadastro de Prestador`;
+        break;
+      case '/onboarding':
+        pageTitle = `${baseTitle} | Configuração Inicial`;
+        break;
+      case '/dashboard':
+        pageTitle = `${baseTitle} | Dashboard`;
+        break;
+      case '/dashboard/pagamentos':
+        pageTitle = `${baseTitle} | Pagamentos`;
+        break;
+      case '/dashboard/folha':
+        pageTitle = `${baseTitle} | Folha de Pagamento`;
+        break;
+      case '/dashboard/adicionar-prestador':
+        pageTitle = `${baseTitle} | Adicionar Prestador`;
+        break;
+      case '/dashboard/configuracoes':
+        pageTitle = `${baseTitle} | Configurações`;
+        break;
+      default:
+        if (location.pathname.includes('/dashboard/prestador/')) {
+          if (location.pathname.includes('/editar')) {
+            pageTitle = `${baseTitle} | Editar Prestador`;
+          } else {
+            pageTitle = `${baseTitle} | Detalhes do Prestador`;
+          }
+        } else {
+          pageTitle = baseTitle;
+        }
+    }
+
+    document.title = pageTitle;
+  }, [location]);
+};
+
 // Component to handle public routes - redirects to dashboard if user is already logged in
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { session } = useAuth();
@@ -30,11 +85,18 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Title manager component that will be used inside the Router context
+const TitleManager = () => {
+  usePageTitle();
+  return null;
+};
+
 const AppRoutes = () => {
   const { session } = useAuth();
 
   return (
     <BrowserRouter>
+      <TitleManager />
       <Routes>
         {/* Public Routes with redirect for authenticated users */}
         <Route path="/" element={

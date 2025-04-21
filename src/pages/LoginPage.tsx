@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Loader2Icon, LogInIcon, AlertCircleIcon, UserPlusIcon } from 'lucide-react';
+import prumaIcon from '../assets/images/pruma-icon.svg';
 import { supabase } from '../lib/supabaseClient';
 
 const LoginPage = () => {
@@ -64,12 +65,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FCF8EE] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Folha PJ
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <div className="flex items-center justify-center">
+          <img src={prumaIcon} alt="Pruma" className="h-8 w-8 text-[#C49A22] mr-2" />
+          <h2 className="mt-6 text-center text-3xl font-light text-gray-900" style={{ fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>
+            Pruma
+          </h2>
+        </div>
+        <p className="mt-2 text-center text-sm text-gray-600 font-light">
           Faça login para acessar o sistema
         </p>
       </div>
@@ -103,7 +107,7 @@ const LoginPage = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#C49A22] focus:border-[#C49A22] sm:text-sm"
                 />
               </div>
             </div>
@@ -121,7 +125,7 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#C49A22] focus:border-[#C49A22] sm:text-sm"
                 />
               </div>
             </div>
@@ -130,7 +134,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#C49A22] hover:bg-[#A37F1C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C49A22] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -149,7 +153,7 @@ const LoginPage = () => {
             <div className="mt-4 text-center">
               <Link
                 to="/signup"
-                className="inline-flex items-center text-sm text-blue-600 hover:text-blue-500"
+                className="inline-flex items-center text-sm text-[#C49A22] hover:text-[#A37F1C]"
               >
                 <UserPlusIcon className="h-4 w-4 mr-1" />
                 Criar nova conta

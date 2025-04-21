@@ -79,7 +79,7 @@ const DashboardPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2Icon className="animate-spin h-8 w-8 text-blue-600" />
+        <Loader2Icon className="animate-spin h-8 w-8 text-[#C49A22]" />
       </div>
     );
   }
@@ -99,7 +99,7 @@ const DashboardPage = () => {
         <h1 className="text-2xl font-bold text-gray-800">Prestadores</h1>
         <button
           onClick={() => navigate('/dashboard/adicionar-prestador')}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center"
+          className="bg-[#C49A22] hover:bg-[#A37F1C] text-white px-4 py-2 rounded-md shadow-sm flex items-center"
         >
           <PlusIcon className="h-5 w-5 mr-1" />
           Adicionar Prestador

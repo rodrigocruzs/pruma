@@ -68,7 +68,7 @@ const ContractorsList = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2Icon className="animate-spin h-8 w-8 text-blue-600" />
+        <Loader2Icon className="animate-spin h-8 w-8 text-[#C49A22]" />
       </div>
     );
   }
@@ -85,13 +85,13 @@ const ContractorsList = () => {
 
   return (
     <div className="space-y-4">
-      <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8">
+      <div className="border-b border-gray-200 bg-white rounded-t-lg">
+        <nav className="-mb-px flex space-x-8 px-6">
           <button
             onClick={() => setActiveTab('ativos')}
             className={`py-4 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'ativos'
-                ? 'border-blue-500 text-blue-600'
+                ? 'border-[#C49A22] text-[#C49A22]'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
@@ -101,7 +101,7 @@ const ContractorsList = () => {
             onClick={() => setActiveTab('inativos')}
             className={`py-4 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'inativos'
-                ? 'border-blue-500 text-blue-600'
+                ? 'border-[#C49A22] text-[#C49A22]'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >

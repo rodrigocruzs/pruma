@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Loader2Icon, UserPlusIcon, AlertCircleIcon, ArrowLeftIcon, CheckCircle2Icon, XCircleIcon } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { toast } from 'react-hot-toast';
+import prumaIcon from '../assets/images/pruma-icon.svg';
 
 interface PasswordRequirement {
   text: string;
@@ -40,8 +41,10 @@ const SignUpPage = () => {
     return newRequirements.every(req => req.met);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const target = e.target;
+    const name = target.name;
+    const value = target.type === 'checkbox' ? (target as HTMLInputElement).checked : target.value;
     
     // Track if password fields have been touched
     if (name === 'password' && !passwordTouched) {
@@ -52,13 +55,18 @@ const SignUpPage = () => {
     }
     
     setFormData(prev => {
-      const newData = { ...prev, [name]: value };
+      const newData = { 
+        ...prev, 
+        [name]: value 
+      };
+      
       if (name === 'password' || name === 'confirmPassword') {
         validatePassword(
-          name === 'password' ? value : newData.password,
-          name === 'confirmPassword' ? value : newData.confirmPassword
+          name === 'password' ? (value as string) : newData.password,
+          name === 'confirmPassword' ? (value as string) : newData.confirmPassword
         );
       }
+      
       return newData;
     });
   };
@@ -97,11 +105,18 @@ const SignUpPage = () => {
   const shouldShowValidation = passwordTouched || confirmPasswordTouched;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FCF8EE] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="text-center text-3xl font-bold text-gray-900 mb-6">
-          Criar Nova Conta
-        </h2>
+        <div className="flex justify-center">
+          <img src={prumaIcon} alt="Pruma" className="h-12 w-12 text-[#C49A22]" />
+        </div>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Criar sua conta na Pruma</h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Ou{' '}
+          <Link to="/login" className="font-medium text-[#C49A22] hover:text-[#A37F1C]">
+            entrar na sua conta existente
+          </Link>
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -116,7 +131,7 @@ const SignUpPage = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                E-mail
+                Email
               </label>
               <div className="mt-1">
                 <input
@@ -127,7 +142,7 @@ const SignUpPage = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#C49A22] focus:border-[#C49A22] sm:text-sm"
                 />
               </div>
             </div>
@@ -141,10 +156,11 @@ const SignUpPage = () => {
                   id="password"
                   name="password"
                   type="password"
+                  autoComplete="new-password"
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#C49A22] focus:border-[#C49A22] sm:text-sm"
                 />
               </div>
             </div>
@@ -161,7 +177,7 @@ const SignUpPage = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#C49A22] focus:border-[#C49A22] sm:text-sm"
                 />
               </div>
             </div>
@@ -195,7 +211,7 @@ const SignUpPage = () => {
               <button
                 type="submit"
                 disabled={loading || !passwordRequirements.every(req => req.met)}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#C49A22] hover:bg-[#A37F1C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C49A22] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -209,16 +225,6 @@ const SignUpPage = () => {
                   </>
                 )}
               </button>
-            </div>
-
-            <div className="mt-4 text-center">
-              <Link
-                to="/login"
-                className="inline-flex items-center text-sm text-blue-600 hover:text-blue-500"
-              >
-                <ArrowLeftIcon className="h-4 w-4 mr-1" />
-                Login
-              </Link>
             </div>
           </form>
         </div>
