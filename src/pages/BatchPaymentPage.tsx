@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeftIcon, CheckIcon, Receipt, Loader2Icon } from 'lucide-react';
+import { ArrowLeftIcon, CheckIcon, Receipt, Loader2Icon, CalendarIcon, WalletIcon } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import { useSettings } from '../hooks/useSettings';
 
 interface Contractor {
   id: string;
@@ -20,12 +21,40 @@ interface Contractor {
 
 const BatchPaymentPage = () => {
   const navigate = useNavigate();
+  const { companySettings, updateCompanySettings, isLoading: settingsLoading } = useSettings();
   const [selectedContractors, setSelectedContractors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [contractors, setContractors] = useState<Contractor[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  // Compute the correct run/pay dates for display
+  const getNextMonthDate = (dateStr: string | null) => {
+    if (!dateStr) return new Date().toISOString().slice(0, 10);
+    const date = new Date(dateStr);
+    const today = new Date();
+    // If the date is in the past for this month, advance to next month
+    if (
+      today.getFullYear() > date.getFullYear() ||
+      (today.getFullYear() === date.getFullYear() && today.getMonth() > date.getMonth()) ||
+      (today.getFullYear() === date.getFullYear() && today.getMonth() === date.getMonth() && today.getDate() > date.getDate())
+    ) {
+      // Advance to next month, same day
+      const nextMonth = new Date(date);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      // Handle month overflow (e.g., Feb 30)
+      if (date.getDate() !== nextMonth.getDate()) {
+        // If overflow, set to last day of next month
+        nextMonth.setDate(0);
+      }
+      return nextMonth.toISOString().slice(0, 10);
+    }
+    return dateStr;
+  };
+
+  const runDate = getNextMonthDate(companySettings?.run_date || null);
+  const paydayDate = getNextMonthDate(companySettings?.payday_date || null);
 
   const monthOptions = [
     { value: '01', label: 'Janeiro' },
@@ -216,12 +245,32 @@ const BatchPaymentPage = () => {
           {error}
         </div>
       )}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-2">
         <h1 className="text-2xl font-bold text-gray-800">
           Folha PJ
         </h1>
       </div>
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="flex flex-col sm:flex-row gap-6 mb-6">
+        <div className="flex items-center gap-3">
+          <CalendarIcon className="h-5 w-5 text-gray-400" />
+          <div>
+            <div className="text-xs text-gray-500 font-medium">Gerar em</div>
+            <div className="font-bold text-gray-900 text-base" style={{ minWidth: 110 }}>
+              {runDate}
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <WalletIcon className="h-5 w-5 text-gray-400" />
+          <div>
+            <div className="text-xs text-gray-500 font-medium">Pagar em</div>
+            <div className="font-bold text-gray-900 text-base" style={{ minWidth: 110 }}>
+              {paydayDate}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="bg-white rounded-lg overflow-hidden">
         <div className="p-6">
           <div className="mb-6">
             <label className="flex items-center">
@@ -238,9 +287,6 @@ const BatchPaymentPage = () => {
                   </th>
                   <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Nome
-                  </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Função
                   </th>
                   <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Remuneração
@@ -268,9 +314,6 @@ const BatchPaymentPage = () => {
                       <div className="font-medium text-gray-900">
                         {contractor.nome} {contractor.sobrenome}
                       </div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-gray-500">{contractor.funcao}</div>
                     </td>
                     <td className="px-3 py-4 whitespace-nowrap">
                       {formatCurrency(contractor.remuneracao)}
